@@ -1,0 +1,9 @@
+package Categorizer;
+
+message WordOccurs {
+	message CategoryOccurs {
+		required uint64 category = 1;
+		required uint64 noccurs = 2;
+	};
+	repeated CategoryOccurs category_occurs = 1;
+};
