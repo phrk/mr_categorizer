@@ -48,7 +48,7 @@ InputType* CategorizerBatch::getNextInput()
 	} else
 		isend = true;
 	
-	std::cout << "New input\n";
+	//std::cout << "New input\n";
 	return (InputType*)ret;
 }
 

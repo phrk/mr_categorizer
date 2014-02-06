@@ -11,21 +11,29 @@ CategorizerMR::CategorizerMR() {
 }
 
 void CategorizerMR::map(const InputType* _input) const {
-	//std::cout << "___MAP \n";
-	//size_t nemits = 0;
+
+	std::tr1::unordered_map<uint64_t, uint64_t> page_words;
+	
 	TextParsedInput *text = (TextParsedInput*) _input;
 	for (size_t s = 0; s < text->sents.size(); s++)
-		for (size_t w = 0; w < text->sents[s].words.size(); w++) {
-			WordOccurs* occurs = new WordOccurs;
-			occurs->m_occurs[ text->category ] = 1;
-			emit(text->sents[s].words[w], occurs);
-			//std::cout << "emits: " << ++nemits << std::endl;
-		}
+		for (size_t w = 0; w < text->sents[s].words.size(); w++)
+			page_words [ text->sents[s].words[w] ] = 1;
+	
+	std::tr1::unordered_map<uint64_t, uint64_t>::iterator it =
+			page_words.begin();
+	std::tr1::unordered_map<uint64_t, uint64_t>::iterator end =
+			page_words.end();
+	
+	while (it != end) {
+		WordOccurs* occurs = new WordOccurs;
+		occurs->m_occurs[ text->category ] = 1;
+		emit(it->first, occurs);
+		it++;
+	}
 }
 
 EmitType* CategorizerMR::reduce(uint64_t _key, EmitType* _a, EmitType* _b) const {
-//	delete _b;
-//	return _a;
+
 	WordOccurs *a = (WordOccurs*) _a;
 	WordOccurs *b = (WordOccurs*) _b;
 	std::tr1::unordered_map<uint64_t, uint64_t>::iterator b_it =

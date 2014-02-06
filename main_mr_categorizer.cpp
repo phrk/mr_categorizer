@@ -27,6 +27,7 @@ htConnPoolPtr conn_pool;
 
 void onFinished(MRInterResultPtr result)
 {
+	
 	DictPtr en_dict (new Dict(conn_pool, "highinit_q", "en_words", "en_stems",
 				LangDetect::EN) );
 	DictPtr ru_dict (new Dict (conn_pool, "highinit_q", "ru_words", "ru_stems",
@@ -38,24 +39,36 @@ void onFinished(MRInterResultPtr result)
 	
 	DictManager dict_man(dicts);
 	
-	
 	result->waitFlushFinished();
 	result->waitInitReading();
+	
+	std::ofstream result_filename_file("result_filename");
+	result_filename_file << result->getFileName() << std::endl;
+	result_filename_file.close();
+	
+	std::cout << "Result file: " << result->getFileName() << std::endl;
 	std::cout << "Finished. Keys: " << result->size() << std::endl;
+	
+	std::ofstream out_debug("out_debug");
+	
 	Int64VecPtr keys = result->getKeys();
 	for (int i = 0; i<1000; i++) {
 		result->preload(keys->at(i), 1);
 		
+		out_debug << "key: " << dict_man.getWord( keys->at(i) ) << ": ";
 		std::cout << "key: " << dict_man.getWord( keys->at(i) ) << ": ";
 		WordOccurs *occurs = (WordOccurs*) result->getEmit(keys->at(i), 1);
 		std::tr1::unordered_map<uint64_t, uint64_t>::iterator it = 
 				occurs->m_occurs.begin();
 		while (it != occurs->m_occurs.end()) {
+			out_debug << it->first << "(" << it->second << ") ";
 			std::cout << it->first << "(" << it->second << ") ";
 			it++;
 		}
+		out_debug << std::endl;
 		std::cout << std::endl;
 	}
+	out_debug.close();
 }
 
 void onProgress(MRProgressBar bar)
@@ -70,7 +83,7 @@ int main(int argc, char** argv) {
 	
 	conn_pool.reset(new htConnPool("localhost", 38080, 1) );
 	
-	word_querier.reset(new htQuerier(conn_pool, ns, "ru_words"));
+	//word_querier.reset(new htQuerier(conn_pool, ns, "ru_words"));
 	/*
 	htKeyScannerPtr key_scanner( new htKeyScanner(conn_pool, ns, "pages") );	
 	while (!key_scanner->end()) {
