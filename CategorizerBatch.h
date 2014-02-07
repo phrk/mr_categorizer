@@ -12,13 +12,7 @@
 
 #include "../htdba/htCollScanner.h"
 
-#include "../hcrawler/wwwht/TextParsed.h"
-
-class TextParsedInput : public InputType, public TextParsed {
-public:
-	TextParsedInput(const std::string &_dump);
-	virtual ~TextParsedInput();
-};
+#include "CategorizerMR.h"
 
 class CategorizerBatch : public BatchAccessor {
 	htCollScannerPtr m_scanner;

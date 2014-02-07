@@ -18,16 +18,12 @@
 
 using namespace std;
 
-/*
- * 
- */
-
 htQuerierPtr word_querier;
 htConnPoolPtr conn_pool;
 
 void onFinished(MRInterResultPtr result)
 {
-	
+	/*
 	DictPtr en_dict (new Dict(conn_pool, "highinit_q", "en_words", "en_stems",
 				LangDetect::EN) );
 	DictPtr ru_dict (new Dict (conn_pool, "highinit_q", "ru_words", "ru_stems",
@@ -38,7 +34,7 @@ void onFinished(MRInterResultPtr result)
 	dicts.push_back(ru_dict);
 	
 	DictManager dict_man(dicts);
-	
+	*/
 	result->waitFlushFinished();
 	result->waitInitReading();
 	
@@ -49,26 +45,27 @@ void onFinished(MRInterResultPtr result)
 	std::cout << "Result file: " << result->getFileName() << std::endl;
 	std::cout << "Finished. Keys: " << result->size() << std::endl;
 	
+	/*
 	std::ofstream out_debug("out_debug");
 	
 	Int64VecPtr keys = result->getKeys();
 	for (int i = 0; i<1000; i++) {
 		result->preload(keys->at(i), 1);
 		
-		out_debug << "key: " << dict_man.getWord( keys->at(i) ) << ": ";
-		std::cout << "key: " << dict_man.getWord( keys->at(i) ) << ": ";
+	//	out_debug << "key: " << dict_man.getWord( keys->at(i) ) << ": ";
+	//	std::cout << "key: " << dict_man.getWord( keys->at(i) ) << ": ";
 		WordOccurs *occurs = (WordOccurs*) result->getEmit(keys->at(i), 1);
 		std::tr1::unordered_map<uint64_t, uint64_t>::iterator it = 
 				occurs->m_occurs.begin();
 		while (it != occurs->m_occurs.end()) {
-			out_debug << it->first << "(" << it->second << ") ";
-			std::cout << it->first << "(" << it->second << ") ";
+	//		out_debug << it->first << "(" << it->second << ") ";
+	//		std::cout << it->first << "(" << it->second << ") ";
 			it++;
 		}
-		out_debug << std::endl;
-		std::cout << std::endl;
+		//out_debug << std::endl;
+		//std::cout << std::endl;
 	}
-	out_debug.close();
+	out_debug.close();*/
 }
 
 void onProgress(MRProgressBar bar)
@@ -94,14 +91,14 @@ int main(int argc, char** argv) {
 			
 	hThreadPool* th_pool = new hThreadPool(4);
 	th_pool->run();
-	
+	/*
 	hSpliterLocalPtr spliter (new hSpliterLocal(conn_pool,
 											ns,
 											"pages", 
 											job_name,
 											hSpliterClient::START,
 										1000) );
-
+*/
 	CategorizerMR* MR = new CategorizerMR();
 	
 	MRNodeDispatcherPtr mr_node(new MRNodeDispatcher(th_pool, MR, "/Volumes/seagate/", 
@@ -109,6 +106,14 @@ int main(int argc, char** argv) {
 	
 	mr_node->setProgressBar(boost::bind(&onProgress, _1));
 	
+	htCollScannerPtr scanner (new htCollScanner(conn_pool,
+												ns,
+												"pages",
+												"text_stemmed") );
+	
+	CategorizerBatch *batch = new CategorizerBatch(scanner);
+	mr_node->addBatch(batch);
+	/*
 	size_t nbatches = 0;
 	KeyRange range = spliter->getSplit();
 	std::cout << "got range " << range.toString() << std::endl;
@@ -116,7 +121,7 @@ int main(int argc, char** argv) {
 		htCollScannerPtr scanner (new htCollScanner(conn_pool,
 												ns,
 												"pages",
-												"text_parsed",
+												"text_stemmed",
 												range) );
 		CategorizerBatch *batch = new CategorizerBatch(scanner);
 		mr_node->addBatch(batch);
@@ -127,6 +132,7 @@ int main(int argc, char** argv) {
 	}
 	
 	std::cout << "Set " << nbatches << " batches\n";
+	*/
 	mr_node->noMoreBatches();
 	th_pool->join();
 	

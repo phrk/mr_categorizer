@@ -12,9 +12,11 @@ CategorizerMR::CategorizerMR() {
 
 void CategorizerMR::map(const InputType* _input) const {
 
+	TextParsedInput *text = (TextParsedInput*) _input;
+	
+	/*
 	std::tr1::unordered_map<uint64_t, uint64_t> page_words;
 	
-	TextParsedInput *text = (TextParsedInput*) _input;
 	for (size_t s = 0; s < text->sents.size(); s++)
 		for (size_t w = 0; w < text->sents[s].words.size(); w++)
 			page_words [ text->sents[s].words[w] ] = 1;
@@ -24,11 +26,21 @@ void CategorizerMR::map(const InputType* _input) const {
 	std::tr1::unordered_map<uint64_t, uint64_t>::iterator end =
 			page_words.end();
 	
-	while (it != end) {
+	 while (it != end) {
 		WordOccurs* occurs = new WordOccurs;
 		occurs->m_occurs[ text->category ] = 1;
 		emit(it->first, occurs);
 		it++;
+	} 
+	*/
+	
+	std::vector<uint64_t> words;
+	text->getUniqeWords(words);
+	
+	for (int i = 0; i<words.size(); i++) {
+		WordOccurs* occurs = new WordOccurs;
+		occurs->m_occurs.insert(std::pair<uint64_t,uint64_t>(text->category, 1));
+		emit(words[i], occurs);
 	}
 }
 

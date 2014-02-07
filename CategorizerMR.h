@@ -12,9 +12,17 @@
 
 #include "../tetramorph/mapreduce/core/mapreduce.h"
 
-#include "CategorizerBatch.h"
+//#include "CategorizerBatch.h"
 
 #include <tr1/unordered_map>
+
+#include "../hcrawler/wwwht/TextParsed.h"
+
+class TextParsedInput : public InputType, public TextParsed {
+public:
+	TextParsedInput(const std::string &_dump);
+	virtual ~TextParsedInput();
+};
 
 class CategorizerMR : public MapReduce {
 public:
