@@ -8,9 +8,9 @@
 #ifndef CATEGORIZERBATCH_H
 #define	CATEGORIZERBATCH_H
 
-#include "../tetramorph/mapreduce/core/mapreduce.h"
+#include "mapreduce/core/mapreduce.h"
 
-#include "../htdba/htCollScanner.h"
+#include "htdba/htCollScanner.h"
 
 #include "CategorizerMR.h"
 

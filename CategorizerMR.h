@@ -10,13 +10,13 @@
 
 #include "WordOccurs.h"
 
-#include "../tetramorph/mapreduce/core/mapreduce.h"
+#include "mapreduce/core/mapreduce.h"
 
 //#include "CategorizerBatch.h"
 
 #include <tr1/unordered_map>
 
-#include "../hcrawler/wwwht/TextParsed.h"
+#include "hcrawler/wwwht/TextParsed.h"
 
 class TextParsedInput : public InputType, public TextParsed {
 public:

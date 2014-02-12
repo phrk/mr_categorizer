@@ -1,0 +1,12 @@
+{
+
+"_NAME" : "mr_categorizer",
+
+"_CPPFILES" : [ { "type": "Glob", "mask": "*.cpp" },
+				{ "type": "Glob", "mask": "*.pb.cc" } ],
+
+"_LINKFLAGS": [ ],
+
+"_DEPS": ["../mapreduce/"]
+
+}

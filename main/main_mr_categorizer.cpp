@@ -12,9 +12,9 @@
 
 #include "../hspliter/hSpliterLocal.h"
 
-#include "../tetramorph/mapreduce/core/MRNodeDispatcher.h"
+#include "mapreduce/core/MRNodeDispatcher.h"
 
-#include "../lang/DictManager.h"
+#include "lang/DictManager.h"
 
 using namespace std;
 

@@ -8,7 +8,7 @@
 #ifndef WORDOCCURS_H
 #define	WORDOCCURS_H
 
-#include "../tetramorph/mapreduce/core/mapreduce.h"
+#include "mapreduce/core/mapreduce.h"
 #include "WordOccurs.pb.h"
 
 class WordOccurs : public EmitType {
