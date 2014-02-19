@@ -5,12 +5,14 @@
  * Created on February 4, 2014, 6:41 PM
  */
 
+#include "hiconfig.h"
+
 #include <cstdlib>
 
-#include "CategorizerMR.h"
-#include "CategorizerBatch.h"
+#include "../CategorizerMR.h"
+#include "../CategorizerBatch.h"
 
-#include "../hspliter/hSpliterLocal.h"
+#include "hspliter/hSpliterLocal.h"
 
 #include "mapreduce/core/MRNodeDispatcher.h"
 
@@ -23,6 +25,10 @@ htConnPoolPtr conn_pool;
 
 void onFinished(MRInterResultPtr result)
 {
+	if (!result) {
+		std::cout << "onFinished Empty Result\n";
+		return;
+	}
 	/*
 	DictPtr en_dict (new Dict(conn_pool, "highinit_q", "en_words", "en_stems",
 				LangDetect::EN) );
@@ -81,16 +87,20 @@ int main(int argc, char** argv) {
 	conn_pool.reset(new htConnPool("localhost", 38080, 1) );
 	
 	//word_querier.reset(new htQuerier(conn_pool, ns, "ru_words"));
+	
+	
 	/*
-	htKeyScannerPtr key_scanner( new htKeyScanner(conn_pool, ns, "pages") );	
-	while (!key_scanner->end()) {
-		std::cout << key_scanner->getNextKey() << std::endl;
+	htCollScannerPtr cat_scanner( new htCollScanner(conn_pool, ns, "pages", "category") );	
+	while (!cat_scanner->end()) {
+		KeyValue cell = cat_scanner->getNextCell();
+		std::cout << cell.value << std::endl;
 	}
+	std::cout << "END!\n";
 	return 0;
 	*/
 			
 	hThreadPool* th_pool = new hThreadPool(4);
-	th_pool->run();
+	
 	/*
 	hSpliterLocalPtr spliter (new hSpliterLocal(conn_pool,
 											ns,
@@ -101,7 +111,7 @@ int main(int argc, char** argv) {
 */
 	CategorizerMR* MR = new CategorizerMR();
 	
-	MRNodeDispatcherPtr mr_node(new MRNodeDispatcher(th_pool, MR, "/Volumes/seagate/", 
+	MRNodeDispatcherPtr mr_node(new MRNodeDispatcher(th_pool, MR, "/Users/phrk/", 
 											boost::bind(&onFinished, _1) ) );
 	
 	mr_node->setProgressBar(boost::bind(&onProgress, _1));
@@ -111,8 +121,15 @@ int main(int argc, char** argv) {
 												"pages",
 												"text_stemmed") );
 	
+	if (scanner->end()) {
+		std::cout << "SCANNER END!\n";
+		return 0;
+	}
+	//return 0;
+	
 	CategorizerBatch *batch = new CategorizerBatch(scanner);
 	mr_node->addBatch(batch);
+	
 	/*
 	size_t nbatches = 0;
 	KeyRange range = spliter->getSplit();
@@ -134,6 +151,7 @@ int main(int argc, char** argv) {
 	std::cout << "Set " << nbatches << " batches\n";
 	*/
 	mr_node->noMoreBatches();
+	th_pool->run();
 	th_pool->join();
 	
 	return 0;

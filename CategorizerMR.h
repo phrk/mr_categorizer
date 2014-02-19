@@ -8,13 +8,14 @@
 #ifndef CATEGORIZERMR_H
 #define	CATEGORIZERMR_H
 
+#include "hiconfig.h"
 #include "WordOccurs.h"
 
 #include "mapreduce/core/mapreduce.h"
 
 //#include "CategorizerBatch.h"
 
-#include <tr1/unordered_map>
+//#include <tr1/unordered_map>
 
 #include "hcrawler/wwwht/TextParsed.h"
 

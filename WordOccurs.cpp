@@ -4,7 +4,7 @@
  * 
  * Created on February 5, 2014, 10:54 AM
  */
-
+#include "hiconfig.h"
 #include "WordOccurs.h"
 
 void WordOccurs::restore(const std::string &_dump)
@@ -23,9 +23,9 @@ void WordOccurs::dump(std::string &_dump) const
 {
 	Categorizer::WordOccurs occurs_pb;
 
-	std::tr1::unordered_map<uint64_t, uint64_t>::const_iterator it = 
+	hiaux::hashtable<uint64_t, uint64_t>::const_iterator it = 
 			m_occurs.begin();
-	std::tr1::unordered_map<uint64_t, uint64_t>::const_iterator end = 
+	hiaux::hashtable<uint64_t, uint64_t>::const_iterator end = 
 			m_occurs.end();
 	
 	while (it != end) {

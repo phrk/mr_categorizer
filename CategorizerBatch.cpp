@@ -5,6 +5,7 @@
  * Created on February 4, 2014, 6:42 PM
  */
 
+#include "hiconfig.h"
 #include "CategorizerBatch.h"
 
 TextParsedInput::TextParsedInput(const std::string &_dump):
@@ -25,8 +26,10 @@ CategorizerBatch::CategorizerBatch(htCollScannerPtr _scanner):
 		KeyValue cell =_scanner->getNextCell();
 		next_input = new TextParsedInput(cell.value);
 		isend = false;
-	} else
+	} else {
 		isend = true;
+	//	std::cout << "CategorizerBatch::CategorizerBatch END\n";
+	}
 }
 
 bool CategorizerBatch::end()
@@ -36,9 +39,10 @@ bool CategorizerBatch::end()
 
 InputType* CategorizerBatch::getNextInput()
 {
-	if (isend)
+	if (isend) {	
+		//std::cout << "CategorizerBatch::getNextInput ISEND\n";
 		return NULL;
-	
+	}
 	TextParsedInput *ret = next_input;
 	
 	if (!m_scanner->end()) {

@@ -8,6 +8,8 @@
 #ifndef CATEGORIZERBATCH_H
 #define	CATEGORIZERBATCH_H
 
+#include "hiconfig.h"
+
 #include "mapreduce/core/mapreduce.h"
 
 #include "htdba/htCollScanner.h"

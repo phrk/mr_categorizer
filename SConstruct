@@ -15,6 +15,7 @@ mr_path = "../"
 b.addPath(hicore_path)
 b.addPath(hiaux_path)
 b.addPath(mr_path)
+b.addPath("./")
 
 b.connectLib("../lang/")
 b.connectLib("../htdba/")
@@ -25,6 +26,7 @@ b.connectLib("../mapreduce/")
 
 b.addCCFlags(["-Wno-return-type"])
 b.addCppGlob("*.cpp")
+b.addCppGlob("main/*.cpp")
 b.addCppGlob("*.pb.cc")
 
 b.buildProgram(Program)

@@ -5,6 +5,7 @@
  * Created on February 4, 2014, 6:42 PM
  */
 
+#include "hiconfig.h"
 #include "CategorizerMR.h"
 
 CategorizerMR::CategorizerMR() {
@@ -12,6 +13,7 @@ CategorizerMR::CategorizerMR() {
 
 void CategorizerMR::map(const InputType* _input) const {
 
+	//std::cout << "map\n";
 	TextParsedInput *text = (TextParsedInput*) _input;
 	
 	/*
@@ -48,12 +50,12 @@ EmitType* CategorizerMR::reduce(uint64_t _key, EmitType* _a, EmitType* _b) const
 
 	WordOccurs *a = (WordOccurs*) _a;
 	WordOccurs *b = (WordOccurs*) _b;
-	std::tr1::unordered_map<uint64_t, uint64_t>::iterator b_it =
+	hiaux::hashtable<uint64_t, uint64_t>::iterator b_it =
 			b->m_occurs.begin();
-	std::tr1::unordered_map<uint64_t, uint64_t>::iterator b_end =
+	hiaux::hashtable<uint64_t, uint64_t>::iterator b_end =
 			b->m_occurs.end();
 	while (b_it != b_end) {
-		std::tr1::unordered_map<uint64_t, uint64_t>::iterator a_it =
+		hiaux::hashtable<uint64_t, uint64_t>::iterator a_it =
 				a->m_occurs.find(b_it->first);
 		if (a_it != a->m_occurs.end())
 			a_it->second += b_it->second;
