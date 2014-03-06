@@ -16,7 +16,8 @@
 
 #include "mapreduce/core/MRNodeDispatcher.h"
 
-#include "lang/DictManager.h"
+#include "lang/offline/DictManager.h"
+#include "lang/online/Dict.h"
 
 using namespace std;
 

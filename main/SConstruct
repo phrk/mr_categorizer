@@ -1,0 +1,36 @@
+
+import sys
+sys.path.insert(0, '../../hiaux/hibuilder/')
+
+from hibuilder import HiBuilder
+
+env = Environment()
+
+b = HiBuilder("mr_categorizer")
+
+hicore_path = "../../"
+hiaux_path = "../../"
+mr_path = "../"
+
+b.addPath(hicore_path)
+b.addPath(hiaux_path)
+b.addPath(mr_path)
+b.addPath("./")
+b.addPath(hicore_path+"thirdparty/")
+
+b.connectLib("../../lang/online/")
+b.connectLib("../../lang/offline/")
+
+b.connectLib("../../htdba/")
+b.connectLib("../../hiaux/threads/")
+b.connectLib("../../hcrawler/")
+b.connectLib("../../mapreduce/")
+b.connectLib("../")
+
+
+b.addCCFlags(["-Wno-return-type"])
+b.addCppGlob("*.cpp")
+b.addCppGlob("main/*.cpp")
+b.addCppGlob("*.pb.cc")
+
+b.buildProgram(Program)
